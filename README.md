@@ -1,6 +1,7 @@
 # en-vi-translate_app
 Building...
 from Attention is all we need
+Support me by chat OpenAI
 pdf: https://arxiv.org/pdf/1706.03762.pdf
 video: 
 https://youtu.be/_Zt23FA31co
