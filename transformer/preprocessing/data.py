@@ -1,6 +1,8 @@
+#File tiền xử lý dữ liệu để đưa vào mô hình transformer text -> các token
 import os
 from transformers import AutoTokenizer
 
+# đọc dữ liệu từ tệp nguồn
 def load_data(en_file, vi_file):
     with open(en_file, "r", encoding="utf-8") as f:
         en_data = f.readlines()
@@ -8,6 +10,7 @@ def load_data(en_file, vi_file):
         vi_data = f.readlines()
     return en_data, vi_data
 
+# tiền xử lý dữ liệu
 def preprocess_data(en_data, vi_data, tokenizer):
     preprocessed_en_data = []
     preprocessed_vi_data = []
@@ -29,6 +32,7 @@ def preprocess_data(en_data, vi_data, tokenizer):
 
     return preprocessed_en_data, preprocessed_vi_data
 
+# lưu dữ liệu sau tiền xử lý
 def save_data(en_data, vi_data, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -41,6 +45,7 @@ def save_data(en_data, vi_data, output_dir):
         for vi_sent in vi_data:
             f.write(" ".join([str(token) for token in vi_sent]) + "\n")
 
+# đường đi của tiền xử lý dữ liệu
 def main():
     en_data, vi_data = load_data("data/en_sents.en", "data/vi_sents.vi")
     tokenizer = AutoTokenizer.from_pretrained("bert-base-multilingual-cased")

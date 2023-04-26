@@ -1,3 +1,4 @@
+# đường đi của mô hình transformer
 import tensorflow as tf
 from transformer.encoder.encoder import EncoderLayer
 from transformer.decoder.decoder import DecoderLayer

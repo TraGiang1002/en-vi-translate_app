@@ -1,3 +1,6 @@
+# Decoder trả câu đầu ra
+#input là vector biểu diễn của câu đầu vào được tạo ra bởi Encoder
+#output là chuỗi các token đầu ra tương ứng với ngôn ngữ đích
 import tensorflow as tf
 from transformer.layers import MultiHeadAttention, FeedForward, LayerNormalization
 

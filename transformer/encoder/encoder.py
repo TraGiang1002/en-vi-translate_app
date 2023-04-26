@@ -1,3 +1,6 @@
+# Encoder học câu đầu vào 
+#input là các token đã qua tiền xử lý dữ liệu, 
+#output là vector biểu diễn dữ liệu có độ dài cố định và đã học được mối liên hệ giữa các từ trong câu và học được vị trí từ trong câu.
 import tensorflow as tf
 from transformer.layers import MultiHeadAttention, FeedForward, LayerNormalization
 

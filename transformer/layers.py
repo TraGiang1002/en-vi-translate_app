@@ -1,3 +1,4 @@
+# Các layers chính biến đổi dữ liệu trong mô hình transformer
 import tensorflow as tf
 
 class MultiHeadAttention(tf.keras.layers.Layer):

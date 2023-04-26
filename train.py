@@ -1,36 +1,35 @@
+# Train mô hình
 import tensorflow as tf
 from transformer.transformer import Transformer
 from transformer.preprocessing.text_processor import TextProcessor
 
-# load the preprocessed data
-en_data_path = 'data/preprocessed/en_data.txt'
-vi_data_path = 'data/preprocessed/vi_data.txt'
-en_data = open(en_data_path, 'r', encoding='utf-8').read().split('\n')
-vi_data = open(vi_data_path, 'r', encoding='utf-8').read().split('\n')
+# Load preprocessed data
+en_data_path = "data/preprocessed/en_data.txt"
+vi_data_path = "data/preprocessed/vi_data.txt"
+text_processor = TextProcessor(en_data_path, vi_data_path)
 
-# create text processors for English and Vietnamese
-en_processor = TextProcessor(en_data)
-vi_processor = TextProcessor(vi_data)
+# Create the transformer model
+transformer = Transformer(
+    num_layers=4,
+    d_model=128,
+    num_heads=8,
+    dff=512,
+    input_vocab_size=text_processor.en_vocab_size + 2,
+    target_vocab_size=text_processor.vi_vocab_size + 2,
+    pe_input=text_processor.en_vocab_size + 2,
+    pe_target=text_processor.vi_vocab_size + 2,
+)
 
-# initialize the transformer model
-transformer = Transformer(num_layers=4, d_model=128, num_heads=8, dff=512, input_vocab_size=en_processor.vocab_size,
-                          target_vocab_size=vi_processor.vocab_size, pe_input=en_processor.vocab_size,
-                          pe_target=vi_processor.vocab_size)
+# Restore the latest checkpoint
+checkpoint_path = tf.train.latest_checkpoint("checkpoints")
+transformer.load_weights(checkpoint_path)
 
-# load the trained model weights
-checkpoint_path = "checkpoints/train"
-ckpt = tf.train.Checkpoint(transformer=transformer)
-ckpt_manager = tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=5)
+# Translate input sentence
+input_sentence = "Đây là một ví dụ về việc dịch máy sử dụng Transformer."
+input_sequence = text_processor.preprocess_vi_text(input_sentence)
+output_sequence = transformer.translate(input_sequence)
+output_sentence = text_processor.postprocess_en_text(output_sequence)
 
-if ckpt_manager.latest_checkpoint:
-    ckpt.restore(ckpt_manager.latest_checkpoint)
-    print('Latest checkpoint restored!!')
-
-# translate the input sentence
-input_text = "xin chào"
-input_seq = vi_processor.encode_sentence(input_text)
-output_seq = transformer.evaluate(input_seq)
-output_text = en_processor.decode_sentence(output_seq)
-
-print(f"Input: {input_text}")
-print(f"Output: {output_text}")
+# Print the translation
+print("Input sentence: ", input_sentence)
+print("Output sentence: ", output_sentence)
